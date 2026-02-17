@@ -1,7 +1,4 @@
 
-#### 7) Create a README file to answer the following questions-
-
-> **⚠️ Warning:** Do not use any AI tools to answer these questions. You must write the answers in **Bangla**.
 
 #### 1) What is the difference between `null` and `undefined`?
 
@@ -31,23 +28,5 @@ Ans:
 Global Scope → পুরো প্রোগ্রামে ব্যবহার করা যায়
 Function Scope → শুধু ওই ফাংশনের ভিতরে ব্যবহার করা যায়
 Block Scope → {} এর ভিতরে সীমাবদ্ধ (let, const দিয়ে তৈরি ভ্যারিয়েবল)
-
-
-    Clicking "Add to Cart":
-    - Adds the product to a Cart list/array.
-    - Updates a Cart Count in the Navbar.
-    - (Optional) Persist in LocalStorage.
-
-    2) Cart Calculation
-    Show a summary (maybe in a sidebar or a separate section/modal) that lists added items and calculates the **Total Price**.
-
-    3) Remove from Cart
-    Ability to remove an item from the cart and update the Total Price instantly.
-
-    4) Loading Spinner
-    Show a loading spinner or skeleton loader while fetching data from the API.
-
-    5) Active State
-    Highlight the currently selected category button.
 
 
