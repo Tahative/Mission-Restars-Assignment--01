@@ -285,7 +285,7 @@
               <input
                 type="email"
                 placeholder="Enter your email"
-                class="input input-bordered w-2xl bg-base-200 text-slate-100 placeholder:text-slate-500 border-slate-700 focus:border-indigo-400"
+                class="input input-bordered w-xl bg-base-200 text-slate-100 placeholder:text-slate-500 border-slate-700 focus:border-indigo-400"
               />
               <button
                 type="submit"
@@ -346,8 +346,8 @@
   </section>
   <!-- footer section end -->
 
-  <!-- Product Details Modal -->
-  <!-- NOTE: keep only ONE modal with these IDs to avoid JS conflicts -->
+  <!-- product dtails modal -->
+  
   <div
     id="productModal"
     class="fixed inset-0 hidden bg-black/50 z-50 items-center justify-center p-4"
@@ -397,12 +397,20 @@
   </div>
 
 
-  <!-- global loader -->
-<div id="globalLoader"
-     class="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-[9999] hidden">
-  <span class="loading loading-infinity loading-xl text-primary"></span>
-</div>
 
+     <!-- global lader -->
+  <div id="globalLoader"
+      class="fixed inset-0 z-[9999] hidden">
+
+    <!-- oerlay -->
+    <div class="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
+
+    <!-- cntered sinner -->
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="loading loading-infinity loading-xl text-primary"></span>
+    </div>
+
+  </div>
 
   <!-- js -->
   <script src="./index.js"></script>
