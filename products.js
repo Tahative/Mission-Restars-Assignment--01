@@ -21,123 +21,6 @@ function showLoader() {
 let ALL_PRODUCTS = [];
 let ACTIVE_CATEGORY = "all";
 
-const USE_LOCAL_STORAGE = true;
-const CART_KEY = "swiftcraft_cart_v1";
-
-// Cart items shape: { id, title, price, image, qty }
-let CART = [];
-
-const money = (n) => Number(n).toFixed(2);
-
-const loadCart = () => {
-  if (!USE_LOCAL_STORAGE) return;
-  try {
-    const raw = localStorage.getItem(CART_KEY);
-    CART = raw ? JSON.parse(raw) : [];
-  } catch {
-    CART = [];
-  }
-};
-
-const saveCart = () => {
-  if (!USE_LOCAL_STORAGE) return;
-  localStorage.setItem(CART_KEY, JSON.stringify(CART));
-};
-
-const cartCount = () => CART.reduce((sum, item) => sum + item.qty, 0);
-
-const cartTotal = () =>
-  CART.reduce((sum, item) => sum + item.price * item.qty, 0);
-
-function renderCart() {
-  const countEl = document.getElementById("cartCount");
-  const countTextEl = document.getElementById("cartCountText");
-  const totalEl = document.getElementById("cartTotal");
-  const container = document.getElementById("cartItems");
-
-  
-  if (!countEl || !countTextEl || !totalEl || !container) return;
-
-  const count = cartCount();
-  const total = cartTotal();
-
-  countEl.textContent = count;
-  countTextEl.textContent = count;
-  totalEl.textContent = money(total);
-
-  if (cart.length === 0) {
-    container.innerHTML = `<p class="text-sm opacity-70">Your cart is empty.</p>`;
-    return;
-  }
-
-  container.innerHTML = cart.map(item => `
-    <div class="flex gap-3 items-center border rounded-xl p-2">
-      <img src="${item.image || ''}" alt="" class="w-12 h-12 object-contain rounded bg-base-200" />
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold truncate">${item.title}</p>
-        <p class="text-xs opacity-70">$${money(item.price)} × ${item.qty}</p>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <button class="btn btn-ghost btn-xs" onclick="decreaseQty('${item.id}')">−</button>
-        <button class="btn btn-ghost btn-xs" onclick="increaseQty('${item.id}')">+</button>
-        <button class="btn btn-error btn-xs" onclick="removeFromCart('${item.id}')">Remove</button>
-      </div>
-    </div>
-  `).join("");
-}
-
-
-window.addToCart = (productId) => {
-  const product = ALL_PRODUCTS.find((p) => p.id === productId);
-  if (!product) return;
-
-  const existing = CART.find((i) => i.id === product.id);
-
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    CART.push({
-      id: String(product.id),
-      title: product.title,
-      price: Number(product.price),
-      image: product.image,
-      qty: 1,
-    });
-  }
-
-  saveCart();
-  renderCart();
-};
-
-const removeFromCart = (id) => {
-  CART = CART.filter((i) => String(i.id) !== String(id));
-  saveCart();
-  renderCart();
-};
-
-const increaseQty = (id) => {
-  const item = CART.find((i) => String(i.id) === String(id));
-  if (!item) return;
-  item.qty += 1;
-  saveCart();
-  renderCart();
-};
-
-const decreaseQty = (id) => {
-  const item = CART.find((i) => String(i.id) === String(id));
-  if (!item) return;
-  item.qty -= 1;
-  if (item.qty <= 0) CART = CART.filter((i) => String(i.id) !== String(id));
-  saveCart();
-  renderCart();
-};
-
-const clearCart = () => {
-  CART = [];
-  saveCart();
-  renderCart();
-};
 
 
 const loadAllProducts = async () => {
@@ -208,7 +91,7 @@ const renderCategoryBar = (products) => {
   });
 };
 
-/* filter products */
+
 const filterByCategory = (cat) => {
   ACTIVE_CATEGORY = cat;
 
@@ -222,7 +105,7 @@ const filterByCategory = (cat) => {
   displayProducts(filtered);
 };
 
-/* display products */
+
 const displayProducts = (products) => {
   const grid = document.getElementById("productsGrid");
   grid.innerHTML = "";
@@ -234,12 +117,12 @@ const displayProducts = (products) => {
       "bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col";
 
     div.innerHTML = `
-      <!-- Image -->
+      
       <div class="bg-slate-50 h-64 flex items-center justify-center p-10">
         <img src="${product.image}" alt="${product.title}" class="h-full w-full object-contain" />
       </div>
 
-      <!-- Body -->
+      
       <div class="p-6 flex flex-col flex-1">
 
         <!-- Category + Rating -->
@@ -255,18 +138,17 @@ const displayProducts = (products) => {
           </div>
         </div>
 
-        <!-- Title -->
+      
         <h3 class="font-bold text-slate-900 leading-snug line-clamp-2 min-h-[52px]">
           ${product.title}
         </h3>
 
-        <!-- Price -->
         <p class="mt-3 text-xl font-extrabold text-slate-900">$${product.price}</p>
 
-        <!-- Buttons -->
+       
         <div class="mt-6 grid grid-cols-2 gap-3">
 
-          <!-- Details Button -->
+         
           <button onclick="openModal(${product.id})"
             class="btn btn-none w-full border rounded-xl normal-case font-semibold">
             <svg xmlns="http://www.w3.org/2000/svg"
@@ -283,10 +165,15 @@ const displayProducts = (products) => {
             Details
           </button>
 
-          <!-- Add Button (HOOKED) -->
+         
           <button
             class="btn btn-primary w-full rounded-xl normal-case font-semibold"
-            onclick="addToCart(${product.id})"
+            onclick='addToCart({
+            id: "${product.id}",
+            title: ${JSON.stringify(product.title)},
+            price: ${product.price},
+            image: "${product.image}"
+          })'"
           >
             <svg xmlns="http://www.w3.org/2000/svg"
               class="h-4 w-4"
@@ -332,17 +219,21 @@ window.openModal = (id) => {
   document.getElementById("modalCount").textContent =
     product.rating?.count ?? "0";
 
+  // Modal Add to Cart button works
+  const addBtn = document.getElementById("modalAddBtn");
+  if (addBtn) {
+    addBtn.onclick = () => addToCart(product);
+  }
+
   modalEl.classList.remove("hidden");
-  modalEl.classList.add("flex");
 };
 
-const closeModal = () => {
+function closeModal() {
+  if (!modalEl) return;
   modalEl.classList.add("hidden");
-  modalEl.classList.remove("flex");
-};
+}
 
 document.addEventListener("DOMContentLoaded", () => {
- 
   modalEl = document.getElementById("productModal");
   closeBtn = document.getElementById("closeModal");
 
@@ -361,9 +252,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.key === "Escape") closeModal();
   });
 
-  
-  loadCart();
-  renderCart();
 
   const clearBtn = document.getElementById("clearCartBtn");
   if (clearBtn) clearBtn.addEventListener("click", clearCart);
@@ -376,7 +264,7 @@ loadAllProducts();
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Home + Products links
+  // home + products links
   document.querySelectorAll('a[href$="index.html"], a[href$="products.html"]').forEach(link => {
     link.addEventListener("click", () => {
       showLoader();

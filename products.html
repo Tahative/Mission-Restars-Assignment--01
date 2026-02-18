@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- title and logo -->
-  <title>SwiftCraft</title>
+  <title>SwiftCart</title>
   <link href="./Assets/Favicon.png" rel="icon" type="image/png" />
 
   <!-- font -->
@@ -58,14 +58,14 @@
 
         <!-- Desktop logo -->
         <a class="hidden lg:block text-2xl font-bold text-primary" href="./index.html">
-          SwiftCraft
+          SwiftCart
         </a>
       </div>
 
       <!-- center(mobile logo only) -->
       <div class="navbar-center lg:hidden">
         <a class="text-2xl font-bold text-primary" href="./index.html">
-          SwiftCraft
+          SwiftCart
         </a>
       </div>
 
@@ -82,51 +82,73 @@
       <!-- cart dropdown) -->
       <div class="navbar-end">
         <div class="dropdown dropdown-end">
-          <label tabindex="0" role="button" class="btn btn-ghost btn-circle">
-            <div class="indicator">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293
-                  c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4
-                  2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
 
-              <!-- REQUIRED ID -->
-              <span id="cartCount" class="badge badge-sm indicator-item">0</span>
+  <!-- Cart Icon -->
+  <label tabindex="0" class="btn btn-ghost btn-circle">
+    <div class="indicator">
+
+      <!-- Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4
+            M7 13L5.4 5M7 13l-2.293 2.293
+            c-.63.63-.184 1.707.707 1.707H17
+            m0 0a2 2 0 100 4
+            2 2 0 000-4zm-8 2a2 2 0 11-4 0
+            2 2 0 014 0z" />
+        </svg>
+
+      <!-- Badge Count -->
+      <span id="cartCount" class="badge badge-sm indicator-item bg-primary text-white">0</span>
+    </div>
+  </label>
+
+  <!-- Dropdown Content -->
+  <div tabindex="0"
+    class="card card-compact dropdown-content bg-base-100 mt-3 w-80 shadow z-[99]">
+
+          <div class="card-body gap-3">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold">
+                Cart (<span id="cartCountText">0</span>)
+              </span>
+
+              <button id="clearCartBtn" class="btn btn-ghost btn-sm">
+                Clear
+              </button>
             </div>
-          </label>
 
-          <!-- dropdown panel -->
-          <div tabindex="0" class="card card-compact dropdown-content bg-base-100 mt-3 w-80 shadow z-[99]">
-            <div class="card-body gap-3">
-              <div class="flex items-center justify-between">
-                <span class="text-lg font-bold">
-                  Cart (<span id="cartCountText">0</span>)
-                </span>
-
-             
-                <button id="clearCartBtn" class="btn btn-ghost btn-sm">Clear</button>
-              </div>
-
-          
-              <div id="cartItems" class="max-h-64 overflow-auto space-y-2">
-                <p class="text-sm opacity-70">Your cart is empty.</p>
-              </div>
-
-              <div class="divider my-1"></div>
-
-              <div class="flex items-center justify-between">
-                <span class="font-semibold">Total</span>
-                $<span id="cartTotal" class="font-bold">0.00</span>
-              </div>
-
-              <div class="card-actions">
-                <button class="btn btn-primary btn-block">View cart</button>
-              </div>
+            <!-- Items -->
+            <div id="cartItems" class="max-h-64 overflow-auto space-y-2">
+              <p class="text-sm opacity-70">Your cart is empty.</p>
             </div>
+
+            <div class="divider my-1"></div>
+
+            <!-- Total -->
+            <div class="flex items-center justify-between">
+              <span class="font-semibold">Total</span>
+              <span class="font-bold">$<span id="cartTotal">0.00</span></span>
+            </div>
+
+            <!-- Button -->
+            <div class="card-actions">
+              <a href="./products.html" class="btn btn-primary btn-block">
+                View Cart
+              </a>
+            </div>
+
           </div>
-        </div>
+        
+    
       </div>
 
     </div>
@@ -143,52 +165,6 @@
     <div id="productsGrid" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"></div>
   </section>
 
-  <!-- product details modal -->
-  <div
-    id="productModal"
-    class="fixed inset-0 hidden bg-black/50 z-50 items-center justify-center p-4"
-  >
-    <div class="bg-white w-full max-w-xl rounded-2xl shadow-xl overflow-hidden relative">
-      <button
-        id="closeModal"
-        type="button"
-        class="absolute top-3 right-3 text-2xl text-slate-600 hover:text-black"
-      >
-        &times;
-      </button>
-
-      <div class="bg-slate-50 p-8 flex justify-center">
-        <img id="modalImg" src="" alt="Product Image" class="h-56 object-contain" />
-      </div>
-
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-3">
-          <span
-            id="modalCategory"
-            class="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-600 font-medium"
-          >
-            Category
-          </span>
-
-          <div class="text-sm flex items-center gap-1 text-slate-600">
-            <span class="text-yellow-500">★</span>
-            <span id="modalRate">0</span>
-            <span class="text-slate-400">(<span id="modalCount">0</span>)</span>
-          </div>
-        </div>
-
-        <h2 id="modalTitle" class="text-xl font-bold text-slate-900">Product Title</h2>
-
-        <p id="modalDesc" class="mt-3 text-sm leading-6 text-slate-600">
-          Product description goes here...
-        </p>
-
-        <p id="modalPrice" class="mt-5 text-lg font-bold text-slate-900">$0</p>
-      </div>
-    </div>
-  </div>
-
-  
   <!-- footer -->
   <section>
     <footer class="bg-slate-900 text-slate-200 py-16">
@@ -265,7 +241,7 @@
               </svg>
             </a>
 
-            <!-- iinstagram -->
+            <!-- instagram -->
             <a class="hover:text-slate-200 transition" href="#" aria-label="Instagram">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm6.2-.9a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0z"/>
@@ -293,61 +269,94 @@
   <!-- footer section end -->
 
   <!-- product details modal -->
-
-  <div
-    id="productModal"
-    class="fixed inset-0 hidden bg-black/50 z-50 items-center justify-center p-4"
-  >
-    <div class="bg-white w-full max-w-xl rounded-2xl shadow-xl overflow-hidden relative">
-      <button
-        id="closeModal"
-        type="button"
-        class="absolute top-3 right-3 text-2xl text-slate-600 hover:text-black"
-      >
-        &times;
-      </button>
-
-      <div class="bg-slate-50 p-8 flex justify-center">
-        <img id="modalImg" src="" alt="Product Image" class="h-56 object-contain" />
-      </div>
-
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-3">
-          <span
-            id="modalCategory"
-            class="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-600 font-medium"
+      
+        <div
+          id="productModal"
+          
+         
+          class="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen z-[9999] hidden bg-black/50 flex 
+          items-center justify-center p-4 "
+        >
+      
+          <div
+            class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden relative
+                  h-[88vh] sm:h-auto sm:max-h-[90vh] flex flex-col"
           >
-            Category
-          </span>
+            
+            <button
+              id="closeModal"
+              type="button"
+              class="absolute top-3 right-3 text-2xl text-slate-600 hover:text-black z-10"
+            >
+              &times;
+            </button>
 
-          <div class="text-sm flex items-center gap-1 text-slate-600">
-            <span class="text-yellow-500">★</span>
-            <span id="modalRate">0</span>
-            <span class="text-slate-400">(<span id="modalCount">0</span>)</span>
+            
+            <div class="bg-slate-50 h-56 sm:h-72 p-4 overflow-hidden relative">
+            <img
+              id="modalImg"
+              src=""
+              alt="Product Image"
+              class="absolute inset-0 m-auto max-h-full max-w-full object-contain p4"
+            />
+          </div>
+
+
+        
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6">
+             
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <span
+                  id="modalCategory"
+                  class="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-600 font-medium"
+                >
+                  Category
+                </span>
+
+                <div class="text-sm flex items-center gap-1 text-slate-600">
+                  <span class="text-yellow-500">★</span>
+                  <span id="modalRate">0</span>
+                  <span class="text-slate-400">(<span id="modalCount">0</span>)</span>
+                </div>
+              </div>
+
+           
+              <h2
+                id="modalTitle"
+                class="text-lg sm:text-xl font-bold text-slate-900 leading-snug"
+              >
+                Product Title
+              </h2>
+
+              <p
+                id="modalDesc"
+                class="mt-3 text-sm leading-6 text-slate-600"
+              >
+                Product description goes here...
+              </p>
+
+          
+              <p
+                id="modalPrice"
+                class="mt-5 text-xl font-extrabold text-slate-900"
+              >
+                $0
+              </p>
+ 
+             
+            </div>
           </div>
         </div>
 
-        <h2 id="modalTitle" class="text-xl font-bold text-slate-900">
-          Product Title
-        </h2>
 
-        <p id="modalDesc" class="mt-3 text-sm leading-6 text-slate-600">
-          Product description goes here...
-        </p>
-
-        <p id="modalPrice" class="mt-5 text-lg font-bold text-slate-900">
-          $0
-        </p>
-      </div>
-    </div>
-  </div>
 
 
      <!-- global lader -->
   <div id="globalLoader" class="fixed left-0 top-0 w-screen h-screen z-[999999] hidden">
       <div class="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
 
-      <!-- Grid is the most reliable perfect-centering on mobile -->
+      
+
       <div class="absolute inset-0 grid place-items-center">
         <span class="loading loading-infinity loading-xl text-primary"></span>
       </div>
@@ -355,5 +364,6 @@
 
   <!-- js -->
   <script src="./products.js"></script>
+  <script src="./cart.js"></script>
 </body>
 </html>

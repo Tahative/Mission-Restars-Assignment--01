@@ -1,6 +1,8 @@
 /* =========================
    Global Loader
 ========================= */
+
+
 function showLoader() {
   const loader = document.getElementById("globalLoader");
   if (loader) loader.classList.remove("hidden");
@@ -18,27 +20,28 @@ function showLoader() {
 }
 
 
-
-
 /* =========================
-   Trending Products Load
+Trending Products Load
 ========================= */
+let HOME_PRODUCTS = [];
+
 const loadProducts = () => {
   showLoader();
 
   fetch("https://fakestoreapi.com/products")
     .then((res) => res.json())
     .then((data) => {
+      HOME_PRODUCTS = data;            // ✅ save for modal
       displayProducts(data.slice(0, 3));
-      hideLoader();
-    });
+    })
+    .catch((err) => console.error(err))
+    .finally(() => hideLoader());     // ✅ loader always hides
 };
 
 /* =========================
    Display Products
 ========================= */
 const displayProducts = (products) => {
-  
   const grid = document.getElementById("trendingGrid");
   if (!grid) return;
 
@@ -48,7 +51,7 @@ const displayProducts = (products) => {
     const div = document.createElement("div");
 
     div.innerHTML = `
-      <!-- Product Card 1 -->
+      <!-- Product Card -->
       <div class="bg-white border border-none rounded-xl overflow-hidden shadow-sm hover:shadow-md transition h-full">
 
         <!-- Image Area -->
@@ -83,7 +86,7 @@ const displayProducts = (products) => {
           <!-- Buttons -->
           <div class="mt-4 flex gap-3">
             <!-- Details -->
-            <button onclick="openModal(${product.id})"
+            <button type="button" onclick="window.openModal(${product.id})"
               class="flex-1 border border-base-300 rounded-lg py-2 text-sm font-medium hover:bg-slate-50 transition flex flex-row items-center justify-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg"
                 width="16" height="16"
@@ -100,7 +103,7 @@ const displayProducts = (products) => {
             </button>
 
             <!-- Add -->
-            <button
+            <button type="button"
               class="flex-1 bg-indigo-600 text-white rounded-lg py-2 text-sm font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2"
               onclick='addToCart({
                 id: "${product.id}",
@@ -126,179 +129,73 @@ const displayProducts = (products) => {
   });
 };
 
-loadProducts();
-
 /* ============
      Modal 
 ============*/
-const modal = document.getElementById("productModal");
+let modalEl, closeBtn;
 
-function openModal(id) {
-  fetch(`https://fakestoreapi.com/products/${id}`)
-    .then((res) => res.json())
-    .then((product) => {
-      document.getElementById("modalImg").src = product.image;
-      document.getElementById("modalTitle").innerText = product.title;
-      document.getElementById("modalCategory").innerText = product.category;
-      document.getElementById("modalRate").innerText = product.rating.rate;
-      document.getElementById("modalCount").innerText = product.rating.count;
-      document.getElementById("modalDesc").innerText = product.description;
-      document.getElementById("modalPrice").innerText = `$${product.price}`;
+window.openModal = (id) => {
+  const product = HOME_PRODUCTS.find((p) => Number(p.id) === Number(id));
+  if (!product || !modalEl) return;
 
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-    });
-}
+  document.getElementById("modalImg").src = product.image;
+  document.getElementById("modalTitle").textContent = product.title;
+  document.getElementById("modalDesc").textContent = product.description;
+  document.getElementById("modalPrice").textContent = `$${product.price}`;
+  document.getElementById("modalCategory").textContent = product.category;
+
+  document.getElementById("modalRate").textContent = product.rating?.rate ?? "0";
+  document.getElementById("modalCount").textContent = product.rating?.count ?? "0";
+
+
+  const addBtn = document.getElementById("modalAddBtn");
+  if (addBtn) {
+    addBtn.onclick = () =>
+      addToCart({
+        id: String(product.id),
+        title: product.title,
+        price: Number(product.price),
+        image: product.image,
+      });
+  }
+
+  modalEl.classList.remove("hidden");
+};
 
 function closeModal() {
-  modal.classList.add("hidden");
-  modal.classList.remove("flex");
+  if (!modalEl) return;
+  modalEl.classList.add("hidden");
 }
 
-document.getElementById("closeModal").addEventListener("click", closeModal);
+document.addEventListener("DOMContentLoaded", () => {
+  modalEl = document.getElementById("productModal");
+  closeBtn = document.getElementById("closeModal");
 
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) closeModal();
-});
-
-/* ===============
-       Cart 
-   ============== */
-const USE_LOCAL_STORAGE = true;
-const STORAGE_KEY = "swiftcraft_cart_v1";
-let cart = [];
-
-const money = (n) => Number(n).toFixed(2);
-
-function saveCart() {
-  if (!USE_LOCAL_STORAGE) return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-}
-
-function loadCart() {
-  if (!USE_LOCAL_STORAGE) return;
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) cart = JSON.parse(raw) || [];
-}
-
-function cartCount() {
-  return cart.reduce((sum, item) => sum + item.qty, 0);
-}
-
-function cartTotal() {
-  return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-}
-
-function renderCart() {
-  const count = cartCount();
-  const total = cartTotal();
-
-  const cartCountEl = document.getElementById("cartCount");
-  const cartCountTextEl = document.getElementById("cartCountText");
-  const cartTotalEl = document.getElementById("cartTotal");
-  const container = document.getElementById("cartItems");
-
-  if (cartCountEl) cartCountEl.textContent = count;
-  if (cartCountTextEl) cartCountTextEl.textContent = count;
-  if (cartTotalEl) cartTotalEl.textContent = money(total);
-
-  if (!container) return;
-
-  if (cart.length === 0) {
-    container.innerHTML = `<p class="text-sm opacity-70">Your cart is empty.</p>`;
+  if (!modalEl || !closeBtn) {
+    console.error("Modal HTML missing. Check IDs.");
     return;
   }
 
-  container.innerHTML = cart.map(item => `
-    <div class="flex gap-3 items-center border rounded-xl p-2">
-      <img src="${item.image || ''}" alt="" class="w-12 h-12 object-contain rounded bg-base-200" />
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold truncate">${item.title}</p>
-        <p class="text-xs opacity-70">$${money(item.price)} × ${item.qty}</p>
-      </div>
+  closeBtn.addEventListener("click", closeModal);
 
-      <div class="flex items-center gap-2">
-        <button class="btn btn-ghost btn-xs" onclick="decreaseQty('${item.id}')">−</button>
-        <button class="btn btn-ghost btn-xs" onclick="increaseQty('${item.id}')">+</button>
-        <button class="btn btn-error btn-xs" onclick="removeFromCart('${item.id}')">Remove</button>
-      </div>
-    </div>
-  `).join("");
-}
-
-function addToCart(product) {
-  const existing = cart.find(i => String(i.id) === String(product.id));
-
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ ...product, qty: 1 });
-  }
-
-  saveCart();
-  renderCart();
-}
-
-function removeFromCart(id) {
-  cart = cart.filter(i => String(i.id) !== String(id));
-  saveCart();
-  renderCart();
-}
-
-function increaseQty(id) {
-  const item = cart.find(i => String(i.id) === String(id));
-  if (!item) return;
-  item.qty += 1;
-  saveCart();
-  renderCart();
-}
-
-function decreaseQty(id) {
-  const item = cart.find(i => String(i.id) === String(id));
-  if (!item) return;
-  item.qty -= 1;
-  if (item.qty <= 0) cart = cart.filter(i => String(i.id) !== String(id));
-  saveCart();
-  renderCart();
-}
-
-function clearCart() {
-  cart = [];
-  saveCart();
-  renderCart();
-}
-
-
-loadCart();
-renderCart();
-
-const clearBtn = document.getElementById("clearCartBtn");
-if (clearBtn) clearBtn.addEventListener("click", clearCart);
-
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.increaseQty = increaseQty;
-window.decreaseQty = decreaseQty;
-window.openModal = openModal;
-
-
-/* =========================
-   Page Navigation Loader
-========================= */
-document.addEventListener("DOMContentLoaded", () => {
-
-  // Home + Products links
-  document.querySelectorAll('a[href$="index.html"], a[href$="products.html"]').forEach(link => {
-    link.addEventListener("click", () => {
-      showLoader();
-    });
+  modalEl.addEventListener("click", (e) => {
+    if (e.target === modalEl) closeModal();
   });
 
-  // shop now button
-  document.querySelectorAll('a[href$="products.html"]').forEach(btn => {
-    btn.addEventListener("click", () => {
-      showLoader();
-    });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
   });
 
+  const clearBtn = document.getElementById("clearCartBtn");
+  if (clearBtn) clearBtn.addEventListener("click", clearCart);
+
+  /* =========================
+     Page Navigation Loader
+  ========================= */
+  document.querySelectorAll('a[href$="index.html"], a[href$="products.html"]').forEach((link) => {
+    link.addEventListener("click", () => showLoader());
+  });
 });
+
+
+loadProducts();

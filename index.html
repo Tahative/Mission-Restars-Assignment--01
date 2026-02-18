@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- title and logo -->
-  <title>SwiftCraft</title>
+  <title>SwiftCart</title>
   <link href="./Assets/Favicon.png" rel="icon" type="image/png" >
 
   <!-- font inter -->
@@ -43,12 +43,12 @@
         </div>
 
         <!-- Desktop logo -->
-        <a class="hidden lg:block text-xl font-bold text-primary" href="./index.html">SwiftCraft</a>
+        <a class="hidden lg:block text-xl font-bold text-primary" href="./index.html">SwiftCart</a>
       </div>
 
       <!-- Center logo (mobile) -->
       <div class="navbar-center lg:hidden">
-        <a class="text-xl font-bold text-primary" href="./index.html">SwiftCraft</a>
+        <a class="text-xl font-bold text-primary" href="./index.html">SwiftCart</a>
       </div>
 
       <!-- Desktop menu -->
@@ -61,58 +61,94 @@
         </ul>
       </div>
 
-      <!-- End (Cart) -->
-      <div class="navbar-end">
+      
+     
+
+      <!-- cart icon -->
+        
+      <div class="navbar-end ">
+
         <div class="dropdown dropdown-end">
-          <label tabindex="0" class="btn btn-ghost btn-circle">
-            <div class="indicator">
-              <!-- cart icon -->
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293
-                    c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4
-                    2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
 
-              <!-- count -->
-              <span id="cartCount" class="badge badge-sm indicator-item">0</span>
-            </div>
-          </label>
 
-          <!-- Dropdown content -->
-          <div tabindex="0" class="card card-compact dropdown-content bg-base-100 mt-3 w-80 shadow z-[99]">
-            <div class="card-body gap-3">
+    <label tabindex="0" class="btn btn-ghost btn-circle">
+      <div class="indicator">
 
-              <div class="flex items-center justify-between">
-                <span class="text-lg font-bold">
-                  Cart (<span id="cartCountText">0</span>)
-                </span>
-                <button id="clearCartBtn" class="btn btn-ghost btn-sm">Clear</button>
-              </div>
+       
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4
+            M7 13L5.4 5M7 13l-2.293 2.293
+            c-.63.63-.184 1.707.707 1.707H17
+            m0 0a2 2 0 100 4
+            2 2 0 000-4zm-8 2a2 2 0 11-4 0
+            2 2 0 014 0z" />
+        </svg>
 
-              <!-- cart items -->
-              <div id="cartItems" class="max-h-64 overflow-auto space-y-2">
-                <p class="text-sm opacity-70">Your cart is empty.</p>
-              </div>
+   
+        <span id="cartCount"
+          class="badge badge-sm indicator-item bg-primary text-white">
+          0
+        </span>
 
-              <div class="divider my-1"></div>
-
-              <div class="flex items-center justify-between">
-                <span class="font-semibold">Total</span>
-                <span class="font-bold">$<span id="cartTotal">0.00</span></span>
-              </div>
-
-              <div class="card-actions">
-                <a href="./products.html" class="btn btn-primary btn-block">View cart</a>
-              </div>
-
-            </div>
-          </div>
-        </div>
       </div>
+    </label>
 
+ 
+    <div tabindex="0"
+      class="card card-compact dropdown-content bg-base-100 mt-3 w-80 shadow-xl z-[999]">
+      <div class="card-body gap-3">
+
+      
+        <div class="flex items-center justify-between">
+          <span class="text-lg font-bold">
+            Cart (<span id="cartCountText">0</span>)
+          </span>
+
+          <button id="clearCartBtn"
+            class="btn btn-ghost btn-sm">
+            Clear
+          </button>
+        </div>
+
+        <div id="cartItems"
+          class="max-h-64 overflow-y-auto space-y-2">
+          <p class="text-sm opacity-70">
+            Your cart is empty.
+          </p>
+        </div>
+
+        <div class="divider my-1"></div>
+
+     
+        <div class="flex items-center justify-between">
+          <span class="font-semibold">Total</span>
+          <span class="font-bold">
+            $<span id="cartTotal">0.00</span>
+          </span>
+        </div>
+
+   
+        <div class="card-actions">
+          <a href="./products.html"
+            class="btn btn-primary btn-block">
+            View Cart
+          </a>
+        </div>
+
+      </div>
     </div>
+
+  </div>
+
+      </div>
+      
   </Header>
   <!-- nav end -->
 
@@ -230,8 +266,13 @@
     <h2 class="text-2xl font-bold mb-6">Trending Now</h2>
 
     <!-- products grid -->
+
+
     
-    <div id="trendingGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    <div id="trendingGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+      
+    </div>
   </section>
   <!-- trending Now end -->
 
@@ -244,7 +285,7 @@
          
           <aside class="max-w-sm">
             <a class="text-xl font-semibold tracking-tight text-indigo-400" href="#">
-              SwiftCraft
+              SwiftCart
             </a>
             <p class="mt-3 text-sm leading-6 text-slate-400">
               Your one-stop shop for all your fashion and lifestyle needs. Quality products,
@@ -347,70 +388,105 @@
   </section>
   <!-- footer section end -->
 
-  <!-- product dtails modal -->
   
-  <div
-    id="productModal"
-    class="fixed inset-0 hidden bg-black/50 z-50 items-center justify-center p-4"
-  >
-    <div class="bg-white w-full max-w-xl rounded-2xl shadow-xl overflow-hidden relative">
-      <button
-        id="closeModal"
-        type="button"
-        class="absolute top-3 right-3 text-2xl text-slate-600 hover:text-black"
-      >
-        &times;
-      </button>
+  
+  
+  <!-- global lader -->
+  
+  <div id="globalLoader" class="fixed left-0 top-0 w-screen h-screen z-[999999] hidden">
+    <div class="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
+    
+    
+    <div class="absolute inset-0 grid place-items-center">
+      <span class="loading loading-infinity loading-xl text-primary"></span>
+    </div>
+  </div>
+  
+  <!-- js -->
+  <script src="./index.js"></script>
+  <script src="./cart.js"></script>
 
-      <div class="bg-slate-50 p-8 flex justify-center">
-        <img id="modalImg" src="" alt="Product Image" class="h-56 object-contain" />
-      </div>
-
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-3">
-          <span
-            id="modalCategory"
-            class="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-600 font-medium"
+  <!-- product details modal -->
+      
+        <div
+          id="productModal"
+          
+         
+          class="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen z-[9999] hidden bg-black/50 flex 
+          items-center justify-center p-4 "
+        >
+      
+          <div
+            class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden relative
+                  h-[88vh] sm:h-auto sm:max-h-[90vh] flex flex-col"
           >
-            Category
-          </span>
+            
+            <button
+              id="closeModal"
+              type="button"
+              class="absolute top-3 right-3 text-2xl text-slate-600 hover:text-black z-10"
+            >
+              &times;
+            </button>
 
-          <div class="text-sm flex items-center gap-1 text-slate-600">
-            <span class="text-yellow-500">★</span>
-            <span id="modalRate">0</span>
-            <span class="text-slate-400">(<span id="modalCount">0</span>)</span>
+            
+            <div class="bg-slate-50 h-56 sm:h-72 p-4 overflow-hidden relative">
+            <img
+              id="modalImg"
+              src=""
+              alt="Product Image"
+              class="absolute inset-0 m-auto max-h-full max-w-full object-contain p4"
+            />
+          </div>
+
+
+        
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6">
+             
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <span
+                  id="modalCategory"
+                  class="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-600 font-medium"
+                >
+                  Category
+                </span>
+
+                <div class="text-sm flex items-center gap-1 text-slate-600">
+                  <span class="text-yellow-500">★</span>
+                  <span id="modalRate">0</span>
+                  <span class="text-slate-400">(<span id="modalCount">0</span>)</span>
+                </div>
+              </div>
+
+           
+              <h2
+                id="modalTitle"
+                class="text-lg sm:text-xl font-bold text-slate-900 leading-snug"
+              >
+                Product Title
+              </h2>
+
+              <p
+                id="modalDesc"
+                class="mt-3 text-sm leading-6 text-slate-600"
+              >
+                Product description goes here...
+              </p>
+
+          
+              <p
+                id="modalPrice"
+                class="mt-5 text-xl font-extrabold text-slate-900"
+              >
+                $0
+              </p>
+
+             
+             
+            </div>
           </div>
         </div>
 
-        <h2 id="modalTitle" class="text-xl font-bold text-slate-900">
-          Product Title
-        </h2>
 
-        <p id="modalDesc" class="mt-3 text-sm leading-6 text-slate-600">
-          Product description goes here...
-        </p>
-
-        <p id="modalPrice" class="mt-5 text-lg font-bold text-slate-900">
-          $0
-        </p>
-      </div>
-    </div>
-  </div>
-
-
-
-     <!-- global lader -->
- 
-    <div id="globalLoader" class="fixed left-0 top-0 w-screen h-screen z-[999999] hidden">
-      <div class="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
-
-      
-      <div class="absolute inset-0 grid place-items-center">
-        <span class="loading loading-infinity loading-xl text-primary"></span>
-      </div>
-    </div>
-
-  <!-- js -->
-  <script src="./index.js"></script>
 </body>
 </html>
