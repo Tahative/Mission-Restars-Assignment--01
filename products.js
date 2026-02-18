@@ -1,3 +1,17 @@
+/* =========================
+   Global Loader
+========================= */
+function showLoader() {
+  const loader = document.getElementById("globalLoader");
+  if (loader) loader.classList.remove("hidden");
+}
+
+function hideLoader() {
+  const loader = document.getElementById("globalLoader");
+  if (loader) loader.classList.add("hidden");
+}
+
+
 let ALL_PRODUCTS = [];
 let ACTIVE_CATEGORY = "all";
 
@@ -29,55 +43,43 @@ const cartCount = () => CART.reduce((sum, item) => sum + item.qty, 0);
 const cartTotal = () =>
   CART.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-const renderCart = () => {
-  
+function renderCart() {
   const countEl = document.getElementById("cartCount");
   const countTextEl = document.getElementById("cartCountText");
   const totalEl = document.getElementById("cartTotal");
-  const itemsEl = document.getElementById("cartItems");
+  const container = document.getElementById("cartItems");
 
-  if (countEl) countEl.textContent = cartCount();
-  if (countTextEl) countTextEl.textContent = cartCount();
-  if (totalEl) totalEl.textContent = money(cartTotal());
+  
+  if (!countEl || !countTextEl || !totalEl || !container) return;
 
-  if (!itemsEl) return;
+  const count = cartCount();
+  const total = cartTotal();
 
-  if (CART.length === 0) {
-    itemsEl.innerHTML = `<p class="text-sm opacity-70">Your cart is empty.</p>`;
+  countEl.textContent = count;
+  countTextEl.textContent = count;
+  totalEl.textContent = money(total);
+
+  if (cart.length === 0) {
+    container.innerHTML = `<p class="text-sm opacity-70">Your cart is empty.</p>`;
     return;
   }
 
-  itemsEl.innerHTML = CART.map((item) => {
-    return `
-      <div class="flex gap-3 items-center border rounded-xl p-2">
-        <img src="${item.image}" alt="" class="w-12 h-12 object-contain rounded bg-base-200" />
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold truncate">${item.title}</p>
-          <p class="text-xs opacity-70">$${money(item.price)} × ${item.qty}</p>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button class="btn btn-ghost btn-xs" data-dec="${item.id}">−</button>
-          <button class="btn btn-ghost btn-xs" data-inc="${item.id}">+</button>
-          <button class="btn btn-error btn-xs" data-rem="${item.id}">Remove</button>
-        </div>
+  container.innerHTML = cart.map(item => `
+    <div class="flex gap-3 items-center border rounded-xl p-2">
+      <img src="${item.image || ''}" alt="" class="w-12 h-12 object-contain rounded bg-base-200" />
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-semibold truncate">${item.title}</p>
+        <p class="text-xs opacity-70">$${money(item.price)} × ${item.qty}</p>
       </div>
-    `;
-  }).join("");
 
- 
-  itemsEl.querySelectorAll("[data-inc]").forEach((btn) => {
-    btn.addEventListener("click", () => increaseQty(btn.dataset.inc));
-  });
-
-  itemsEl.querySelectorAll("[data-dec]").forEach((btn) => {
-    btn.addEventListener("click", () => decreaseQty(btn.dataset.dec));
-  });
-
-  itemsEl.querySelectorAll("[data-rem]").forEach((btn) => {
-    btn.addEventListener("click", () => removeFromCart(btn.dataset.rem));
-  });
-};
+      <div class="flex items-center gap-2">
+        <button class="btn btn-ghost btn-xs" onclick="decreaseQty('${item.id}')">−</button>
+        <button class="btn btn-ghost btn-xs" onclick="increaseQty('${item.id}')">+</button>
+        <button class="btn btn-error btn-xs" onclick="removeFromCart('${item.id}')">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
 
 
 window.addToCart = (productId) => {
@@ -133,17 +135,23 @@ const clearCart = () => {
 
 
 const loadAllProducts = async () => {
-  const res = await fetch("https://fakestoreapi.com/products");
-  const products = await res.json();
+  showLoader();
 
-  ALL_PRODUCTS = products;
+  try {
+    const res = await fetch("https://fakestoreapi.com/products");
+    const products = await res.json();
 
-  renderCategoryBar(products);
-  displayProducts(products);
+    ALL_PRODUCTS = products;
 
-  
-  renderCart();
+    renderCategoryBar(products);
+    displayProducts(products);
+  } catch (err) {
+    console.error("Failed to load products:", err);
+  } finally {
+    hideLoader();
+  }
 };
+
 
 const normalizeCategoryLabel = (cat) => {
   const map = {
@@ -184,8 +192,13 @@ const renderCategoryBar = (products) => {
 
   bar.querySelectorAll("button[data-cat]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      filterByCategory(btn.dataset.cat);
+      showLoader();
+      setTimeout(() => {
+        filterByCategory(btn.dataset.cat);
+        hideLoader();
+      }, 300);
     });
+
   });
 };
 
@@ -351,3 +364,25 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 loadAllProducts();
+
+/* =========================
+   Page Navigation Loader
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Home + Products links
+  document.querySelectorAll('a[href$="index.html"], a[href$="products.html"]').forEach(link => {
+    link.addEventListener("click", () => {
+      showLoader();
+    });
+  });
+
+  // shop now button
+  document.querySelectorAll('a[href$="products.html"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      showLoader();
+    });
+  });
+
+});
+

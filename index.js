@@ -1,10 +1,30 @@
 /* =========================
+   Global Loader
+========================= */
+function showLoader() {
+  const loader = document.getElementById("globalLoader");
+  if (loader) loader.classList.remove("hidden");
+}
+
+function hideLoader() {
+  const loader = document.getElementById("globalLoader");
+  if (loader) loader.classList.add("hidden");
+}
+
+
+
+/* =========================
    Trending Products Load
 ========================= */
 const loadProducts = () => {
+  showLoader();
+
   fetch("https://fakestoreapi.com/products")
     .then((res) => res.json())
-    .then((data) => displayProducts(data.slice(0, 3)));
+    .then((data) => {
+      displayProducts(data.slice(0, 3));
+      hideLoader();
+    });
 };
 
 /* =========================
@@ -253,3 +273,25 @@ window.removeFromCart = removeFromCart;
 window.increaseQty = increaseQty;
 window.decreaseQty = decreaseQty;
 window.openModal = openModal;
+
+
+/* =========================
+   Page Navigation Loader
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Home + Products links
+  document.querySelectorAll('a[href$="index.html"], a[href$="products.html"]').forEach(link => {
+    link.addEventListener("click", () => {
+      showLoader();
+    });
+  });
+
+  // shop now button
+  document.querySelectorAll('a[href$="products.html"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      showLoader();
+    });
+  });
+
+});
