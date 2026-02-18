@@ -345,18 +345,14 @@
 
 
      <!-- global lader -->
-  <div id="globalLoader"
-      class="fixed inset-0 z-[9999] hidden">
+  <div id="globalLoader" class="fixed left-0 top-0 w-screen h-screen z-[999999] hidden">
+      <div class="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
 
-    <!-- oerlay -->
-    <div class="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
-
-    <!-- cntered sinner -->
-    <div class="absolute inset-0 flex items-center justify-center">
-      <span class="loading loading-infinity loading-xl text-primary"></span>
+      <!-- Grid is the most reliable perfect-centering on mobile -->
+      <div class="absolute inset-0 grid place-items-center">
+        <span class="loading loading-infinity loading-xl text-primary"></span>
+      </div>
     </div>
-
-  </div>
 
   <!-- js -->
   <script src="./products.js"></script>
